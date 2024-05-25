@@ -75,7 +75,7 @@ const MainDashboard = ({isLoggedIn}) => {
   return (
     <div className='bg-customGreen w-full'>
             
-      <div className='m-8 mt-3 ml-0 h-[94vh] bg-customSkin rounded-3xl shadow-customShadow2 p-5 pl-7 pt-3'>
+      <div className='m-8 mt-2 ml-0 h-[94vh] bg-customSkin rounded-3xl shadow-customShadow2 p-5 pl-7 pt-3'>
                 {/* TOP SECTION  */}
         <div className='flex justify-between items-center'>
             <div className='flex flex-col'>
