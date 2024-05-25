@@ -1,14 +1,18 @@
-import React,{useState} from 'react'
+import React,{useState , useEffect} from 'react'
 import verify from "../assets/verify.png"
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
-const VerifyPage = ({setLoginPage}) => {
-    setLoginPage(true)
-    const [otp, setOtp] = useState(['', '', '', '']);
+
+const VerifyPage = ({email ,setLoginPage,setLoggedIn,isLoggedIn}) => {
+    const navigate = useNavigate()
+    console.log("Verigy page",email)
+    const [OTP, setOtp] = useState(['', '', '', '']);
 
     const handleChange = (e, index) => {
         const { value } = e.target;
         if (!isNaN(value) && value.length <= 1) {
-            const newOtp = [...otp];
+            const newOtp = [...OTP];
             newOtp[index] = value;
             setOtp(newOtp);
             if (value !== '' && index < 3) {
@@ -17,9 +21,34 @@ const VerifyPage = ({setLoginPage}) => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("Entered OTP is " + otp.join(''));
+        console.log("otp = ",OTP.join(''))
+        let otp =OTP.join('');
+        const response = await fetch ("https://medamoove.rootski.live/api/verify_otp_login/",{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({otp,email})
+        })
+        console.log("Response verify ",response)
+        const data = await response.json();
+        console.log("Data varify ",data);
+        if(response.ok){
+            console.log("TOken ",data.data.access);
+            toast.success("OTP Varified");
+            const token =data.data.access;
+            localStorage.setItem("token",token);
+            console.log("localStorage ",localStorage)
+            setLoginPage(false);
+            setLoggedIn(true);
+            navigate("/dashboard")
+        }
+        else{
+            toast.error("Invalid OTP")
+            setOtp(['', '', '', ''])
+        }
     };
   return (
     <div className='w-[100vw] h-[100vh] bg-customGreen2 flex justify-evenly items-center'>
@@ -32,7 +61,7 @@ const VerifyPage = ({setLoginPage}) => {
             <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center mt-10">
             <label className='font-medium text-[1.1rem] mb-1 mr-[9rem]'>Enter Code</label>
             <div className='flex gap-4 '>
-                    {otp.map((digit, index) => (
+                    {OTP.map((digit, index) => (
                         <input
                             key={index}
                             id={`otp-${index}`}

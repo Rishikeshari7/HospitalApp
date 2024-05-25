@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Logo from "../assets/Logo.png"
 import User from "../assets/User.png"
 import Doctor from "../assets/Doctor.png"
-const MainDashboard = () => {
+import { useNavigate } from 'react-router-dom'
+const MainDashboard = ({isLoggedIn}) => {
+    const navigate = useNavigate()
+    useEffect(()=>{
+        if(!isLoggedIn)
+            navigate("/")
+    },[])
     const doctors=[
         {
             profile:Doctor,

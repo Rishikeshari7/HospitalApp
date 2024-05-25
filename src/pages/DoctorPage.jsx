@@ -1,10 +1,16 @@
-import React from 'react'
+import React , {useEffect} from 'react'
 import User from "../assets/User.png"
 import Logo from "../assets/Logo.png"
 import Doctor from "../assets/Doctor.png"
 import { LiaStethoscopeSolid } from "react-icons/lia";
 import DoctorCard from '../components/DoctorCard';
-const DoctorPage = () => {
+import { useNavigate } from 'react-router-dom';
+const DoctorPage = ({isLoggedIn}) => {
+    const navigate = useNavigate()
+    useEffect(()=>{
+        if(!isLoggedIn)
+            navigate("/")
+    },[])
     const allDoctor = [
         {
             img:Doctor,

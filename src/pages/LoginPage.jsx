@@ -2,25 +2,34 @@ import React , {useState} from 'react'
 import Login from "../assets/login.png"
 import { FcGoogle } from "react-icons/fc";
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
-    const [inputValue, setInputValue] = useState('');
-    const loginApi = "https://medamoove.rootski.live/api/login/"
+const LoginPage = ({email,setEmail}) => {
+    
+    const navigate = useNavigate()
 
 
     const submitHandler =async(e)=>{
         e.preventDefault()
-        console.log(inputValue)
+        console.log(email)
         const response = await fetch("https://medamoove.rootski.live/api/login/",{
           method:"POST",
           headers:{
-            'Content-Type':'application/json'
+            'Content-Type':'application/json',
           },
-          body:JSON.stringify({inputValue})
+          body:JSON.stringify({email})
         });
         console.log("response ",response)
         const data = await response.json();
         console.log("data",data)
+        
+        if(response.ok){
+          toast.success("Redirecting to verify Page")
+          navigate("/verify")
+        }
+        else{
+          toast.error("Invalid Email")
+        }
         
     }
   return (
@@ -43,8 +52,8 @@ const LoginPage = () => {
             className='w-[20rem] h-10 p-1 border-2 border-customText rounded-lg '
                 type="email"
                 placeholder='Enter Email'
-                value={inputValue}
-                onChange={(event) => setInputValue(event.target.value)}
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 required
             />
             <button className='bg-customGreen2 hover:bg-customGreen text-white rounded-lg p-2 mt-8'>Get OTP</button>

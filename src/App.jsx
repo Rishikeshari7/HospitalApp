@@ -12,11 +12,13 @@ import LoginPage from './pages/LoginPage';
 import VerifyPage from './pages/VerifyPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useNavigate } from 'react-router-dom';
 function App() {
+  const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState("DASHBOARD");
   const [atLoginPage,setLoginPage]=useState(true);
   const [isLoggedIn,setLoggedIn]=useState(false);
+  const [email, setEmail] = useState('');
   return (
     <>
     <div className='flex'>
@@ -25,7 +27,7 @@ function App() {
       <nav className='bg-customGreen h-[100vh] w-[16rem]'>
         <div className='flex flex-col justify-between h-full text-customText pt-[7rem] pb-10 text-[1.1rem] pl-3 font-medium'>
           <ul className='flex flex-col gap-2'>
-            <NavLink to="/"
+            <NavLink to="/dashboard"
               className={`flex items-center gap-3 p-3 rounded-3xl rounded-r-sm cursor-pointer ${activeItem === 'DASHBOARD' ? 'bg-customSkin text-customGreen' : ''}`}
               onClick={() => setActiveItem('DASHBOARD')}
             >
@@ -59,7 +61,7 @@ function App() {
             </li>
             <li
               className={`flex items-center gap-3 p-3 rounded-3xl rounded-r-sm cursor-pointer ${activeItem === 'Logout' ? 'bg-customSkin text-customGreen' : ''}`}
-              onClick={() => {setActiveItem('Logout');setLoggedIn(false)}}
+              onClick={() => {setActiveItem('Logout');setLoggedIn(false);navigate("/");setLoginPage(true);setActiveItem('DASHBOARD')}}
             >
               <MdOutlineLogout /> Logout
             </li>
@@ -67,14 +69,14 @@ function App() {
         </div>
       </nav>
     }
-    </div>
+   
       <Routes>
-        <Route path="/dashboard" element={<MainDashboard/>}></Route>
-        <Route path ="/doctor" element={<DoctorPage/>} ></Route>
-        <Route path ="/" element={<LoginPage setLoginPage={setLoginPage}/>} ></Route>
-        <Route path="/verify" element={<VerifyPage setLoginPage={setLoginPage}/>} ></Route>
+        <Route path ="/" element={<LoginPage email={email} setEmail={setEmail} setLoginPage={setLoginPage}/>} ></Route>
+        <Route path="/verify" element={<VerifyPage setLoggedIn={setLoggedIn} isLoggedIn={isLoggedIn} email={email} setEmail={setEmail} setLoginPage={setLoginPage}/>} ></Route>
+        <Route path="/dashboard" element={<MainDashboard isLoggedIn={isLoggedIn}/>}></Route>
+        <Route path ="/doctor" element={<DoctorPage isLoggedIn={isLoggedIn}/>} ></Route>
       </Routes>
-    
+      </div>
     <ToastContainer/>
     </>
   );
