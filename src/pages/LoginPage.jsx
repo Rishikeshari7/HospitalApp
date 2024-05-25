@@ -1,17 +1,30 @@
 import React , {useState} from 'react'
 import Login from "../assets/login.png"
 import { FcGoogle } from "react-icons/fc";
+import { toast } from 'react-toastify';
 
-const LoginPage = ({setLoginPage}) => {
-    setLoginPage(true);
+const LoginPage = () => {
     const [inputValue, setInputValue] = useState('');
+    const loginApi = "https://medamoove.rootski.live/api/login/"
 
-    const submitHandler =(e)=>{
+
+    const submitHandler =async(e)=>{
         e.preventDefault()
         console.log(inputValue)
+        const response = await fetch("https://medamoove.rootski.live/api/login/",{
+          method:"POST",
+          headers:{
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({inputValue})
+        });
+        console.log("response ",response)
+        const data = await response.json();
+        console.log("data",data)
+        
     }
   return (
-    <div className='w-[100vw] h-[100vh] bg-customGreen flex justify-evenly items-center'>
+    <div className='w-[100vw] h-[100vh] bg-customGreen2 flex justify-evenly items-center'>
       <img className='scale-90' src={Login}></img>
       <div className='bg-customSkin flex flex-col justify-center w-[600px] h-[700px] gap-5 mr-10  rounded-3xl shadow-customShadow2'>
         <div className='mx-auto flex flex-col gap-2'>
@@ -27,7 +40,7 @@ const LoginPage = ({setLoginPage}) => {
         <form className='mx-auto flex flex-col gap-2' onSubmit={submitHandler}>
             <label className='font-medium'>Email Address</label>
             <input
-            className='w-[20rem] h-10 p-1 border-2 border-customText rounded-lg'
+            className='w-[20rem] h-10 p-1 border-2 border-customText rounded-lg '
                 type="email"
                 placeholder='Enter Email'
                 value={inputValue}

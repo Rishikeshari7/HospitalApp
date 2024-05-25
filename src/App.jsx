@@ -9,10 +9,13 @@ import MainDashboard from './pages/MainDashboard';
 import { Routes , Route , NavLink } from 'react-router-dom';
 import DoctorPage from './pages/DoctorPage';
 import LoginPage from './pages/LoginPage';
+import VerifyPage from './pages/VerifyPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [activeItem, setActiveItem] = useState("DASHBOARD");
-  const [atLoginPage,setLoginPage]=useState(false);
+  const [atLoginPage,setLoginPage]=useState(true);
   const [isLoggedIn,setLoggedIn]=useState(false);
   return (
     <>
@@ -64,13 +67,15 @@ function App() {
         </div>
       </nav>
     }
-
-      <Routes>
-        <Route path="/" element={<MainDashboard/>}></Route>
-        <Route path ="/doctor" element={<DoctorPage/>} ></Route>
-        <Route path ="/login" element={<LoginPage setLoginPage={setLoginPage}/>} ></Route>
-      </Routes>
     </div>
+      <Routes>
+        <Route path="/dashboard" element={<MainDashboard/>}></Route>
+        <Route path ="/doctor" element={<DoctorPage/>} ></Route>
+        <Route path ="/" element={<LoginPage setLoginPage={setLoginPage}/>} ></Route>
+        <Route path="/verify" element={<VerifyPage setLoginPage={setLoginPage}/>} ></Route>
+      </Routes>
+    
+    <ToastContainer/>
     </>
   );
 }
